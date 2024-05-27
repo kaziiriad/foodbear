@@ -1,4 +1,4 @@
-from django.forms import forms
+from django import forms
 from . models import *
 
 class MealOffForm(forms.Form):
@@ -8,6 +8,7 @@ class MealOffForm(forms.Form):
         ('dinner', 'Dinner'),
         ('both', 'Both'),
     )
+
     meal_type = forms.ChoiceField(choices=MEAL_CHOICES)
 
 class OrderForm(forms.ModelForm):

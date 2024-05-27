@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from .models import Subscription
-from .forms import SubscriptionForm, OrderForm
+from .forms import MealOffForm, OrderForm
 
 
 class MealOffSuccessView(TemplateView):
@@ -14,7 +14,7 @@ class MealOffSuccessView(TemplateView):
 
 class MealOffView(View):
 
-    form_class = SubscriptionForm
+    form_class = MealOffForm
     template_name = 'foodbear_app/meal_off.html'
 
     def get(self, request, *args, **kwargs):
@@ -104,4 +104,19 @@ class OrderMealView(View):
             form.save()
         
         return render(request, self.template_name, {"form": form})
+
+
+class DailyOrdersView(View):
+
+    template_name = 'foodbear_app/daily_orders.html'
+    def get(self, request, *args, **kwargs):
+
+        today = timezone.now().date()
+        orders = Order.objects.filter(order_date=today).values('category', 'meal_type').annotate(count=Count('id'))
         
+        stats = {'lunch': {'basic': 0, 'premium': 0}, 'dinner': {'basic': 0, 'premium': 0}}
+        for order in orders:
+            stats[order['meal_type']][order['category']] = order['count']
+        
+        return render(request, self.template_name, {'data': stats})
+    

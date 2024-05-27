@@ -32,8 +32,8 @@ class Subscription(models.Model):
     end = models.DateTimeField(blank=True, null=True)
     lunch_off = models.BooleanField(default=False)
     dinner_off = models.BooleanField(default=False)
-    total_cost = models.DecimalField(max_digits=5, decimal_places=2)
-    balance = models.DecimalField(max_digits=5, decimal_places=2)
+    total_cost = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    balance = models.DecimalField(max_digits=5, decimal_places=2 )
     status = models.BooleanField(default=True, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
 
