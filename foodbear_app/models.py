@@ -25,7 +25,7 @@ class Subscription(models.Model):
         (False, 'Inactive'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.DecimalField(max_digits=5, decimal_places=2, choices=CATEGORY_CHOICES)
     plan_days = models.IntegerField(choices=PLAN_CHOICES)
     start = models.DateTimeField(auto_now_add=True)
@@ -47,3 +47,24 @@ class Subscription(models.Model):
             self.total_cost = self.plan_days * self.category
         
         super(Subscription, self).save(*args, **kwargs)
+
+
+class Order(models.Model):
+
+    CATEGORY_CHOICES = [
+        ('basic', 'Basic'),
+        ('premium', 'Premium')
+    ]
+    
+    MEAL_CHOICES = [
+        ('lunch', 'Lunch'),
+        ('dinner', 'Dinner')
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES)
+    meal_type = models.CharField(max_length=6, choices=MEAL_CHOICES)
+    order_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.category} - {self.meal_type}"

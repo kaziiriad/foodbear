@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if message %}
+
+    <h3 style="color:green;">
+        {{ message }}
+    </h3>
+    <br>
+    <h3>
+        {{ new_balance }}
+    </h3>
+
+{% elif error_message %}
+
+    <h3 style="color:red;">
+        {{ error_message }}
+    </h3>
+
+{% endif %}
+
+{% block content %}

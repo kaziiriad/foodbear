@@ -1,5 +1,5 @@
 from django.forms import forms
-from . models import Subscription
+from . models import *
 
 class MealOffForm(forms.Form):
 
@@ -9,6 +9,13 @@ class MealOffForm(forms.Form):
         ('both', 'Both'),
     )
     meal_type = forms.ChoiceField(choices=MEAL_CHOICES)
+
+class OrderForm(forms.ModelForm):
+    
+    class Meta:
+        model = Order
+        fields = ("meal_type",)
+
 
 # class SubscriptionForm(forms.ModelForm):
     
