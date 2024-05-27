@@ -4,8 +4,10 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 
-from .models import Subscription
+from .models import Subscription, Order
 from .forms import MealOffForm, OrderForm
+
+from django.db.models import Count
 
 
 class MealOffSuccessView(TemplateView):
@@ -101,6 +103,7 @@ class OrderMealView(View):
             form.save(commit=False)
             form.user = request.user
             form.category = subscription.get_category_display().lower()
+            
             form.save()
         
         return render(request, self.template_name, {"form": form})
@@ -112,11 +115,16 @@ class DailyOrdersView(View):
     def get(self, request, *args, **kwargs):
 
         today = timezone.now().date()
+        subsciption = Subscription.objects.all()
         orders = Order.objects.filter(order_date=today).values('category', 'meal_type').annotate(count=Count('id'))
         
-        stats = {'lunch': {'basic': 0, 'premium': 0}, 'dinner': {'basic': 0, 'premium': 0}}
+        stats = {'lunch': 
+                    {'basic': 0, 'premium': 0}, 
+                'dinner': 
+                    {'basic': 0, 'premium': 0}}
         for order in orders:
             stats[order['meal_type']][order['category']] = order['count']
         
+        print(stats)
         return render(request, self.template_name, {'data': stats})
     
