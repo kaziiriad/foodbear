@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+{% block content %}
+  {% csrf_token %}
+  {{ form.as_p }}
+{% endblock %}
