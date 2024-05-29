@@ -3,6 +3,9 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from faker import Faker
 from foodbear_app.models import Subscription, Order
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 
 class Command(BaseCommand):
     
@@ -27,7 +30,7 @@ class Command(BaseCommand):
         users = User.objects.all()
 
         plan_days_choices = [3, 7, 15, 30]
-        category_choices = [1.5, 2.75]
+        category_choices = ['basic', 'premium']
 
         for user in users:  
             plan_days = random.choice(plan_days_choices)

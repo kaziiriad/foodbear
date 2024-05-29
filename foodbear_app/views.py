@@ -10,8 +10,12 @@ from .forms import MealOffForm, OrderForm
 from django.db.models import Count
 
 
-class MealOffSuccessView(TemplateView):
-    template_name = 'foodbear_app/meal_off_success.html'
+class HomeView(TemplateView):
+
+    template_name = 'base.html'
+
+class SuccessView(TemplateView):
+    template_name = 'foodbear_app/success_page.html'
 
 
 class MealOffView(View):
@@ -49,14 +53,14 @@ class MealOffView(View):
                 return render(request, self.template_name, {'form': form, 'error_message': 'You can not order meal at this time.'})
 
             subscription.save()
-            return redirect('meal_off_success')
+            return redirect('success_page')
 
         return render(request, self.template_name, {"form": form})
 
 ## Feature#2: Reduce Balance
 class OrderMealView(View):
 
-    template_name = 'foodbear/order_meal.html'
+    template_name = 'foodbear_app/order_meal.html'
     form_class = OrderForm
 
 
@@ -85,25 +89,25 @@ class OrderMealView(View):
                     subscription.balance -= cost_per_meal
                     subscription.save()
 
-                    return render(request, 'foodbear_app/order_sucess.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
+                    return render(request, 'foodbear_app/success_page.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
                 else:
-                    return render(request, 'foodbear_app/order_sucess.html', {'error_message': 'Meal turned off already.'})
+                    return render(request, 'foodbear_app/success_page.html', {'error_message': 'Meal turned off already.'})
                 
                 if meal_type == 'dinner' and not subscription.dinner_off:
                     subscription.balance -= cost_per_meal
                     subscription.save()
 
-                    return render(request, 'foodbear_app/order_sucess.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
+                    return render(request, 'foodbear_app/success_page.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
                 else:
-                    return render(request, 'foodbear_app/order_sucess.html', {'error_message': 'Meal turned off already.'})
+                    return render(request, 'foodbear_app/success_page.html', {'error_message': 'Meal turned off already.'})
             else:
-                return render(request, 'foodbear_app/order_sucess.html', {'error_message': 'You do not have enough balance.'})
+                return render(request, 'foodbear_app/success_page.html', {'error_message': 'You do not have enough balance.'})
 
 
             form.save(commit=False)
             form.user = request.user
-            form.category = subscription.get_category_display().lower()
-            
+            form.category = subscription.category
+            print(subscription.category)            
             form.save()
         
         return render(request, self.template_name, {"form": form})
@@ -124,7 +128,9 @@ class DailyOrdersView(View):
                     {'basic': 0, 'premium': 0}}
         for order in orders:
             stats[order['meal_type']][order['category']] = order['count']
-        
+            print(order['count'])
+
         print(stats)
         return render(request, self.template_name, {'data': stats})
     
+

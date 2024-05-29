@@ -1,5 +1,17 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    {{ <form action="" class="as_p"></form> }}
-{% endblock  %}
+<br>
+<br>
+<div class="container card col-md-4 p-3">
+
+    <h3 class="text-center">Ordr Meal</h3>
+    <form class="p-3" action="{% url "order_meal" %}" method="post">
+        {% csrf_token %}
+  
+        {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+{% endblock %}

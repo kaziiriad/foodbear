@@ -15,8 +15,8 @@ class Subscription(models.Model):
 
     CATEGORY_CHOICES = (
 
-        (1.5, 'Basic'),
-        (2.75, 'Premium'),
+        ('basic', 'Basic'),
+        ('premium', 'Premium'),
 
     )
 
@@ -25,8 +25,13 @@ class Subscription(models.Model):
         (False, 'Inactive'),
     )
 
+    Category_Dictionary = {
+        'basic': 1.5,
+        'premium': 2.75,
+    }
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.DecimalField(max_digits=5, decimal_places=2, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES)
     plan_days = models.IntegerField(choices=PLAN_CHOICES)
     start = models.DateTimeField(auto_now_add=True)
     end = models.DateTimeField(blank=True, null=True)
@@ -44,7 +49,7 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
 
         if not self:
-            self.total_cost = self.plan_days * self.category
+            self.total_cost = self.plan_days * self.Category_Dictionary[self.category]
         
         super(Subscription, self).save(*args, **kwargs)
 

@@ -5,7 +5,17 @@
 {% endif %}
 
 {% block content %}
-  {% csrf_token %}
-  {{ form.as_p }}
+<br>
+<br>
+<div class="container card col-md-4 p-3">
+
+    <h3 class="text-center">Meal Off</h3>
+    <form class="p-3" action="{% url "meal_off" %}" method="post">
+      {% csrf_token %}
   
+        {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
 {% endblock %}
