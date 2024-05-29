@@ -23,8 +23,8 @@ from foodbear_app.admin import admin_site
 urlpatterns = [
     path('admin/', admin_site.urls),
     path('', include('foodbear_app.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name="foodbear_app/home.html"), name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name="login.html", next_page="/"), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name="home.html"), name='logout'),
     path('register/', views.RegistrationView.as_view(), name='register'),
 
 ]
