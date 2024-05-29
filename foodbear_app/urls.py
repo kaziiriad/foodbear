@@ -1,7 +1,7 @@
 
 from django.urls import path
-from .views import MealOffView, SuccessView, OrderMealView, DailyOrdersView, HomeView
-
+from .views import MealOffView, SuccessView, OrderMealView, HomeView
+from .admin_views import DailyOrdersView
 
 urlpatterns = [
     

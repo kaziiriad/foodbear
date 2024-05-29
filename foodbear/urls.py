@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from foodbear_app import views as views
+from foodbear_app.admin import admin_site
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin_url'),
+    path('admin/', admin_site.urls),
     path('', include('foodbear_app.urls')),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name="foodbear_app/home.html"), name='logout'),
