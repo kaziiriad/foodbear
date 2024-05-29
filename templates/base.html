@@ -11,7 +11,12 @@
 </head>
 
 <body>
+
+  {% include "navbar.html" %}
+
   {% block content %}
+  {% if user.is_authenticated %}
+
   <H1 class="text-center p-3">
     Welcome to FoodBear!
   </H1>
@@ -24,6 +29,14 @@
     <br>
     <a class="btn btn-outline-success p-1" href="{% url "order_meal" %}">Order Meal</a>
   </div>
+  
+  {% else %}
+    <p class="text-center">
+
+      <a href="{% url "login" %}">Login</a> or
+      <a href="{% url "register" %}">Register</a> if you don't have an account. 
+    </p>
+  {% endif %}
   {% endblock %}
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
