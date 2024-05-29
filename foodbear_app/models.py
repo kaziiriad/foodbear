@@ -30,7 +30,7 @@ class Subscription(models.Model):
         'premium': 2.75,
     }
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE)
     category = models.CharField(max_length=7, choices=CATEGORY_CHOICES)
     plan_days = models.IntegerField(choices=PLAN_CHOICES)
     start = models.DateTimeField(auto_now_add=True)
@@ -69,7 +69,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=7, choices=CATEGORY_CHOICES)
     meal_type = models.CharField(max_length=6, choices=MEAL_CHOICES)
-    order_date = models.DateField(auto_now_add=True)
+    order_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.category} - {self.meal_type}"

@@ -80,6 +80,7 @@ class OrderMealView(View):
 
             
             cost_per_meal = subscription.total_cost / (subscription.plan_days * 2)
+
             meal_type = form.cleaned_data['meal_type']
 
             if cost_per_meal >= subscription.balance:
@@ -90,16 +91,16 @@ class OrderMealView(View):
                     subscription.save()
 
                     return render(request, 'foodbear_app/success_page.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
-                else:
-                    return render(request, 'foodbear_app/success_page.html', {'error_message': 'Meal turned off already.'})
                 
-                if meal_type == 'dinner' and not subscription.dinner_off:
+                elif meal_type == 'dinner' and not subscription.dinner_off:
                     subscription.balance -= cost_per_meal
                     subscription.save()
 
                     return render(request, 'foodbear_app/success_page.html', {'message': 'Order Successful', 'new_balance': subscription.balance})
-                else:
+                
+                elif subscription.dinner_off or subscription.lunch_off:
                     return render(request, 'foodbear_app/success_page.html', {'error_message': 'Meal turned off already.'})
+            
             else:
                 return render(request, 'foodbear_app/success_page.html', {'error_message': 'You do not have enough balance.'})
 
@@ -119,13 +120,13 @@ class DailyOrdersView(View):
     def get(self, request, *args, **kwargs):
 
         today = timezone.now().date()
-        subsciption = Subscription.objects.all()
-        orders = Order.objects.filter(order_date=today).values('category', 'meal_type').annotate(count=Count('id'))
+        orders = Order.objects.filter(order_time=today).values('category', 'meal_type').annotate(count=Count('id'))
         
         stats = {'lunch': 
                     {'basic': 0, 'premium': 0}, 
                 'dinner': 
                     {'basic': 0, 'premium': 0}}
+        
         for order in orders:
             stats[order['meal_type']][order['category']] = order['count']
             print(order['count'])
